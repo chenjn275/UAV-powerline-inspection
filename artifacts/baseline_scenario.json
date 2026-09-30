@@ -1,0 +1,43 @@
+{
+  "candidate_evaluations": [
+    {
+      "accepted": true,
+      "min_line_distance_m": 4.999999999999999,
+      "min_obstacle_clearance_m": 2.924335963004437,
+      "radius_m": 5.0,
+      "violation_reason": null
+    },
+    {
+      "accepted": true,
+      "min_line_distance_m": 3.999999999999999,
+      "min_obstacle_clearance_m": 3.1402982133451456,
+      "radius_m": 4.0,
+      "violation_reason": null
+    },
+    {
+      "accepted": true,
+      "min_line_distance_m": 5.999999999999999,
+      "min_obstacle_clearance_m": 2.943035462778536,
+      "radius_m": 6.0,
+      "violation_reason": null
+    }
+  ],
+  "coverage": {
+    "completed_cells": 57,
+    "ratio": 0.285,
+    "reconnect_cell": [
+      25.0,
+      -0.06544984694978735
+    ],
+    "total_cells": 200,
+    "uncovered_cells": 143
+  },
+  "model_version": "straight-single-span-v1",
+  "scenario": "straight-single-span-with-interruption",
+  "selected": {
+    "min_line_distance_m": 4.999999999999999,
+    "radius_m": 5.0,
+    "score": -0.5543517816755612,
+    "theta_amplitude_deg": 10.0
+  }
+}

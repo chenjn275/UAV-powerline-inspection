@@ -1,0 +1,21 @@
+inspection_manager:
+  ros__parameters:
+    frame_id: map
+    # PX4/Gazebo acceptance mode: climb around the observed tower.  Use
+    # ``line`` only when replaying the original straight-span geometry demo.
+    scan_mode: vertical_tower
+    start_s: 0.0
+    end_s: 50.0
+    radius_candidates: [4.0, 5.0, 6.0]
+    line_exclusion_radius: 2.0
+    sample_dt: 0.1
+    publish_rate: 10.0
+    require_observation: true
+    tower_center_x: 0.0
+    tower_center_y: 0.0
+    z_min: 1.5
+    z_max: 9.5
+    orbit_radius: 2.5
+    orbit_count: 2.0
+    orbit_samples_per_turn: 80
+    orbit_start_angle: 0.0

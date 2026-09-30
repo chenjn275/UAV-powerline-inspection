@@ -1,0 +1,34 @@
+{
+  "scenarios": [
+    {
+      "accepted_count": 3,
+      "candidate_count": 3,
+      "failure_reasons": [],
+      "line_length_m": 50.0,
+      "scenario": "straight_clear",
+      "selected_min_line_distance_m": 4.999999999999999,
+      "selected_radius_m": 5.0
+    },
+    {
+      "accepted_count": 3,
+      "candidate_count": 3,
+      "failure_reasons": [],
+      "line_length_m": 51.92582403567252,
+      "scenario": "bent_line",
+      "selected_min_line_distance_m": 4.994771852380054,
+      "selected_radius_m": 5.0
+    },
+    {
+      "accepted_count": 0,
+      "candidate_count": 3,
+      "failure_reasons": [
+        "obstacle:blocking_obstacle"
+      ],
+      "line_length_m": 50.0,
+      "scenario": "no_safe_candidate",
+      "selected_min_line_distance_m": null,
+      "selected_radius_m": null
+    }
+  ],
+  "suite": "inspection-geometry-baseline-v1"
+}

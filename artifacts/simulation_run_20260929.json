@@ -1,0 +1,47 @@
+{
+  "run_date": "2026-09-29",
+  "checkout": "ros2-humble",
+  "verification": {
+    "regression_tests": "51 passed",
+    "python_compile": "passed",
+    "artifact_validation": "passed",
+    "installed_ros_packages": "passed",
+    "px4_controller_contract_tests": "3 passed"
+  },
+  "completed_simulations": [
+    {
+      "name": "geometry_scenario_suite",
+      "artifact": "scenario_suite.json",
+      "result": "straight_clear and bent_line safe; no_safe_candidate rejected"
+    },
+    {
+      "name": "interruption_reconnect_baseline",
+      "artifact": "baseline_scenario.json",
+      "result": "57/200 cells covered; reconnect target selected"
+    },
+    {
+      "name": "abc_ablation",
+      "artifact": "ablation.json",
+      "result": "fixed radius rejected; candidate search and reconnect accepted"
+    },
+    {
+      "name": "abc_ablation_batch",
+      "artifact": "ablation_batch_150.json",
+      "result": "150 deterministic runs; candidate safe rate 1.0; fusion valid rate 0.8"
+    },
+    {
+      "name": "native_px4_inspection_sitl",
+      "artifact": "px4_inspection_sitl_20260929.log",
+      "result": "heartbeat, arm, two-orbit rising scan, landing and disarm completed"
+    }
+  ],
+  "environment_limited_checks": [
+    "ROS 2 DDS and Gazebo require network permissions unavailable in the default sandbox; an escalated ROS launch started the integrated tower nodes and native Gazebo server.",
+    "Gazebo ROS OpenNI plugin is not installed; stable pure-ROS sensor simulation remains the supported sensor path."
+  ],
+  "not_claimed_complete": [
+    "Science Robotics paper benchmark: 60 maps x 18 trials x 4 planners = 1080 experiments",
+    "real D435i/Livox/FAST-LIO2 calibration and hardware flight",
+    "enabled ROS PX4 Offboard flight"
+  ]
+}

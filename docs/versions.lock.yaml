@@ -1,0 +1,63 @@
+schema_version: 1
+lock_status: partial
+generated_at: "2026-09-30"
+project:
+  name: "four-rotor transmission-line inspection"
+  phase: "T01/T04 baseline"
+  ros_workspace: "/home/venom/Documents/ChatGPT/巡检/super_ws"
+
+host:
+  os: "Ubuntu 22.04.5 LTS"
+  kernel: "6.8.0-111-generic"
+  architecture: "x86_64"
+  compiler: "GNU 11.4.0"
+  python: "3.10.12"
+
+ros:
+  distribution: "humble"
+  prefix: "/opt/ros/humble"
+  verified_packages:
+    ros2cli: "0.18.18"
+    rclpy: "3.3.21"
+    launch: "1.0.14"
+    launch_ros: "0.19.13"
+
+repositories:
+  - name: "SUPER"
+    url: "https://github.com/hku-mars/SUPER.git"
+    branch: "ros2-humble"
+    commit: "2ad3419c127a617c6d7df6925e81a14175a9c096"
+    status: "verified: official click demo builds and resolves"
+    license_status: "upstream package declarations require final license review"
+  - name: "inspection_core"
+    url: "workspace source"
+    branch: "ros2-humble"
+    commit: "uncommitted"
+    status: "project-authored geometry and coverage baseline"
+    license_status: "internal/proprietary until ownership is confirmed"
+
+planned_dependencies:
+  - name: "FAST-LIO2"
+    url: "https://github.com/Venom-Algorithm/Fast-LIO.git"
+    commit: "633f681dc5bda92de63379db056016103de5d3c8"
+    status: "verified in MID-360 Gazebo simulation: /livox/lidar -> /cloud_registered and /odom"
+  - name: "Livox ROS driver 2"
+    url: "https://github.com/Livox-SDK/livox_ros_driver2.git"
+    commit: "960bb5702c1e3a6197ff8fc5c3c9bca4e2e87f37"
+    status: "verified in MID-360 Gazebo simulation; publishes livox_ros_driver2/msg/CustomMsg"
+  - name: "venom_mid360_simulation"
+    url: "workspace source: simulation/venom_nav_simulation/src/rm_simulation/venom_mid360_simulation"
+    commit: "workspace source (repository superproject commit not available)"
+    status: "verified: Gazebo IMU and Livox MID-360 ray plugin launch"
+  - name: "RealSense ROS"
+    url: "https://github.com/IntelRealSense/realsense-ros.git"
+    commit: null
+    status: "D435i hardware and firmware not yet verified"
+  - name: "PX4"
+    url: "https://github.com/PX4/PX4-Autopilot.git"
+    commit: "local checkout /home/venom/PX4-Autopilot (commit to be recorded after clean SITL run)"
+    status: "native SITL startup and historical takeoff/landing ULog verified; clean rerun currently blocked by Gazebo getifaddrs/TCP 4560"
+
+notes:
+  - "Do not treat the planned dependencies as validated until a commit, system image, and launch log are recorded."
+  - "The current verified milestone is SUPER plus the project-authored geometry/coverage reference implementation."

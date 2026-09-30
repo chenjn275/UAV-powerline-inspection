@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="inspection_depth_camera">
+    <pose>0 0 0.035 0 0 0</pose>
+    <link name="link">
+      <gravity>false</gravity>
+      <kinematic>true</kinematic>
+      <inertial>
+        <pose>0.01 0.025 0.025 0 0 0</pose>
+        <mass>0.01</mass>
+        <inertia>
+          <ixx>4.15e-6</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>2.407e-6</iyy>
+          <iyz>0</iyz>
+          <izz>2.407e-6</izz>
+        </inertia>
+      </inertial>
+      <visual name="visual">
+        <!-- Primitive housing keeps this ROS demo independent of PX4's
+             optional realsense_camera mesh path. -->
+        <geometry><box><size>0.12 0.06 0.04</size></box></geometry>
+        <material><ambient>0.04 0.05 0.07 1</ambient><diffuse>0.04 0.05 0.07 1</diffuse><specular>0.35 0.35 0.40 1</specular></material>
+      </visual>
+      <visual name="left_lens">
+        <pose>0.062 -0.018 0 0 1.570796 0</pose>
+        <geometry><cylinder><radius>0.010</radius><length>0.004</length></cylinder></geometry>
+        <material><ambient>0.02 0.18 0.28 1</ambient><diffuse>0.02 0.18 0.28 1</diffuse><specular>0.7 0.8 0.9 1</specular></material>
+      </visual>
+      <visual name="right_lens">
+        <pose>0.062 0.018 0 0 1.570796 0</pose>
+        <geometry><cylinder><radius>0.010</radius><length>0.004</length></cylinder></geometry>
+        <material><ambient>0.02 0.18 0.28 1</ambient><diffuse>0.02 0.18 0.28 1</diffuse><specular>0.7 0.8 0.9 1</specular></material>
+      </visual>
+      <sensor name="d435i_depth" type="depth">
+        <always_on>true</always_on>
+        <update_rate>15</update_rate>
+        <visualize>false</visualize>
+        <camera name="d435i_camera">
+          <horizontal_fov>1.518436</horizontal_fov>
+          <image>
+            <format>B8G8R8</format>
+            <width>848</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.105</near>
+            <far>20.0</far>
+          </clip>
+          <depth_camera></depth_camera>
+          <distortion>
+            <k1>0.0</k1>
+            <k2>0.0</k2>
+            <k3>0.0</k3>
+            <p1>0.0</p1>
+            <p2>0.0</p2>
+            <center>0.5 0.5</center>
+          </distortion>
+        </camera>
+        <!-- gazebo_plugins' ROS 2 camera plugin supports depth sensors and
+             publishes RGB, depth and PointCloud2.  It is intentionally a
+             simulation sensor; it does not model D435i USB timing/calibration. -->
+        <plugin name="d435i_ros" filename="libgazebo_ros_camera.so">
+          <ros>
+            <namespace>/inspection_d435i</namespace>
+          </ros>
+          <camera_name>d435i</camera_name>
+          <frame_name>inspection_d435i_link</frame_name>
+          <hack_baseline>0.07</hack_baseline>
+          <min_depth>0.105</min_depth>
+          <max_depth>20.0</max_depth>
+        </plugin>
+      </sensor>
+    </link>
+  </model>
+</sdf>

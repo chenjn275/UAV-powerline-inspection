@@ -1,0 +1,25 @@
+{
+  "scenarios": [
+    {
+      "accepted": false,
+      "accepted_count": 0,
+      "variant": "A_fixed_radius"
+    },
+    {
+      "accepted": true,
+      "accepted_count": 2,
+      "variant": "B_candidate_search"
+    },
+    {
+      "accepted": true,
+      "accepted_count": 2,
+      "coverage_ratio": 0.285,
+      "reconnect_cell": [
+        25.0,
+        -0.07500000000000001
+      ],
+      "variant": "C_candidate_plus_coverage_reconnect"
+    }
+  ],
+  "suite": "ablation-v1"
+}

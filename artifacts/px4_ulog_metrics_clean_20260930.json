@@ -1,0 +1,19 @@
+{
+  "ulog": "/home/venom/PX4-Autopilot/build/px4_sitl_default/rootfs/log/2026-09-30/04_34_21.ulg",
+  "duration_s": 114.016,
+  "armed_seen": true,
+  "disarmed_end": true,
+  "setpoint_min_down_m": -9.47353458404541,
+  "setpoint_max_down_m": 1.6975502967834473,
+  "offboard_seen": true,
+  "estimated_min_z_m": -0.0015730569139122963,
+  "estimated_max_z_m": 0.9237060546875,
+  "groundtruth_max_up_m": -0.14599609375,
+  "groundtruth_end_up_m": -0.7760009765625,
+  "nav_states": [
+    4,
+    14,
+    18
+  ],
+  "evidence_scope": "clean native PX4 SITL run; complete takeoff, two-orbit reference, NAV_LAND and disarm"
+}

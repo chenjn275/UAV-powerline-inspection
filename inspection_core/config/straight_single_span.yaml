@@ -1,0 +1,23 @@
+model_version: straight-single-span-v1
+frame_id: map
+centerline:
+  - [0.0, 0.0, 10.0]
+  - [50.0, 0.0, 10.0]
+inspection:
+  start_s: 0.0
+  end_s: 50.0
+  radius_m: 5.0
+  theta_center_rad: 0.0
+  theta_amplitude_deg: 10.0
+  period_s: 16.0
+  along_line_speed_mps: 0.5
+safety:
+  line_exclusion_radius_m: 2.0
+  obstacle_margin_m: 1.0
+  max_position_error_m: 0.3
+coverage:
+  s_bins: 25
+  theta_bins: 8
+  min_distance_m: 4.0
+  max_distance_m: 6.0
+  min_sharpness: 0.8

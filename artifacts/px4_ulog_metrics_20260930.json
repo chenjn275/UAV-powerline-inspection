@@ -1,0 +1,19 @@
+{
+  "ulog": "/home/venom/PX4-Autopilot/build/px4_sitl_default/rootfs/log/2026-09-30/02_33_27.ulg",
+  "duration_s": 114.064,
+  "armed_seen": true,
+  "disarmed_end": true,
+  "setpoint_min_down_m": -9.475531578063965,
+  "setpoint_max_down_m": 1.242504358291626,
+  "offboard_seen": true,
+  "estimated_min_z_m": -0.1912841796875,
+  "estimated_max_z_m": 0.128204345703125,
+  "groundtruth_max_up_m": 0.001007080078125,
+  "groundtruth_end_up_m": -0.0,
+  "nav_states": [
+    4,
+    14,
+    18
+  ],
+  "evidence_scope": "historical native PX4 SITL run; not current clean rerun"
+}

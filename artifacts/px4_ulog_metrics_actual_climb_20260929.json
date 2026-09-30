@@ -1,0 +1,19 @@
+{
+  "ulog": "/home/venom/PX4-Autopilot/build/px4_sitl_default/rootfs/log/2026-09-29/08_34_50.ulg",
+  "duration_s": 170.836,
+  "armed_seen": true,
+  "disarmed_end": false,
+  "setpoint_min_down_m": -8.680556297302246,
+  "setpoint_max_down_m": 0.06136535853147507,
+  "offboard_seen": true,
+  "estimated_min_z_m": -8.5889892578125,
+  "estimated_max_z_m": 0.050445556640625,
+  "groundtruth_max_up_m": 8.4739990234375,
+  "groundtruth_end_up_m": 8.253021240234375,
+  "nav_states": [
+    4,
+    14,
+    18
+  ],
+  "evidence_scope": "historical native PX4 SITL run; actual climb verified, landing incomplete"
+}
