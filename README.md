@@ -1,3 +1,38 @@
+# UAV Powerline Inspection Based on SUPER
+本项目基于 SUPER 安全导航框架，扩展了四旋翼输电线路巡检仿真系统，包含：
+- 输电塔、导线和障碍物 Gazebo 场景
+- 巡检半径、净空和避障规划
+- 上升螺旋巡检轨迹与覆盖率评估
+- 故障注入和动态重新规划
+- PX4 SITL Offboard 起飞、巡检和降落
+- MID‑360/Livox/FAST‑LIO2 仿真数据链
+- D435i/MID‑360 传感器挂载模型
+- ROS 2 点云、TF、里程计和 rosbag 记录
+- 51 项自动化回归测试和 150 组批量实验
+## 仿真验证结果
+当前已验证：
+- `51 passed`
+- `SIMULATION_VERIFICATION_OK`
+- 带传感器 `iris_inspection` 模型实际爬升约 9.55 m
+- 完成两圈上升巡检轨迹
+- 完成 PX4 `NAV_LAND`
+- 完成降落和解锁
+- `/livox/imu`、`/livox/lidar`、`/cloud_registered`、`/odom` 约 100 Hz
+## 快速启动
+```bash
+cd SUPER
+source /opt/ros/humble/setup.bash
+export PX4_SIM_MODEL=iris_inspection
+export INSPECTION_DURATION=45
+export INSPECTION_RADIUS=4.0
+export INSPECTION_Z_MIN=1.5
+export INSPECTION_Z_MAX=9.5
+export GAZEBO_MASTER_URI=http://127.0.0.1:11345
+export GAZEBO_IP=127.0.0.1
+export GAZEBO_HOST=127.0.0.1
+export PX4_SIM_HOSTNAME=127.0.0.1
+unset HEADLESS
+bash scripts/run_px4_inspection_sitl.sh
 <div align="center">
     <h2>SUPER: Safety-assured High-speed Navigation for MAVs</h2>
     <strong>Science Robotics' 25</strong>
