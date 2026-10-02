@@ -97,7 +97,20 @@ namespace fsm {
         Fsm() = default;
         ~Fsm();
 
+        // Stop all planner timers after the mission controller has handed
+        // control to PX4's landing state.  The PX4 bridge keeps the last
+        // valid SUPER command while it requests NAV_LAND, so stopping the
+        // planner here cannot interrupt the landing setpoint contract.
+        void stopPlanning() {
+            stop = true;
+            gi_.new_goal = false;
+            finish_plan = true;
+        }
+
         void updateROGMap(const rog_map::PointCloud &cloud, const super_utils::Pose &pose) {
+            if (stop) {
+                return;
+            }
             planner_ptr_->updateROGMap(cloud, pose);
         }
 

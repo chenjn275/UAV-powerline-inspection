@@ -65,7 +65,7 @@ SUPER/
 │   ├── px4_mavlink_inspection.py           # 起飞/螺旋巡检/NAV_LAND 控制器
 │   ├── install_px4_inspection_model.sh     # 安装扁平 iris_inspection 模型
 │   ├── record_mid360_fastlio_bag.sh        # 录制 Livox/FAST-LIO2 rosbag
-│   ├── verify_simulation.sh                 # 51 项回归和场景验收
+│   ├── verify_simulation.sh                 # 62 项回归和场景验收
 │   ├── check_px4_sitl_prerequisites.sh     # 检查 PX4/Gazebo/模型依赖
 │   ├── test_px4_mavlink_inspection.py      # MAVLink 控制器单测
 │   ├── build_ros2_humble.sh                # ROS 2 工作区构建辅助

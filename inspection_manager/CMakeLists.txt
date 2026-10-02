@@ -20,6 +20,7 @@ install(PROGRAMS
   inspection_manager/quality_coverage_sim_node.py
   inspection_manager/pointcloud_image_fusion_sim_node.py
   inspection_manager/health_fault_sim_node.py
+  inspection_manager/px4_position_odom_bridge.py
   DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
 # The node imports the geometry helper as a regular Python package when run

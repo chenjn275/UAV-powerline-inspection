@@ -24,6 +24,28 @@ class TowerLocalizationTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             estimate_tower_observation([(0, 0, 1 + i * 0.001) for i in range(40)])
 
+    def test_long_conductor_returns_do_not_inflate_tower_footprint(self):
+        points = []
+        height = 10.0
+        for i in range(240):
+            z = 0.15 + (i % 80) * ((height - 0.3) / 79.0)
+            leg = i % 3
+            angle = leg * 2.0 * math.pi / 3.0
+            radius = 1.5 * (1.0 - 0.45 * z / height)
+            points.append((
+                4.0 + radius * math.cos(angle) + 0.02 * math.sin(i),
+                -2.0 + radius * math.sin(angle) + 0.02 * math.cos(i),
+                z,
+            ))
+        # Simulated conductor returns sit several metres outside the compact
+        # tower footprint and must not drive the automatic orbit radius.
+        points.extend((7.0 + 0.02 * math.sin(i), -2.8 + i * 0.05, 8.8) for i in range(30))
+        obs = estimate_tower_observation(points)
+        self.assertAlmostEqual(obs.center_x, 4.0, delta=0.15)
+        self.assertAlmostEqual(obs.center_y, -2.0, delta=0.15)
+        self.assertLess(obs.uncertainty_m, 2.0)
+        self.assertGreater(obs.height_m, 9.0)
+
 
 if __name__ == "__main__":
     unittest.main()

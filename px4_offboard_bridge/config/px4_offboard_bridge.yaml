@@ -2,6 +2,7 @@ px4_offboard_bridge:
   ros__parameters:
     path_topic: /inspection/reference_path
     vehicle_position_topic: /fmu/out/vehicle_local_position
+    vehicle_status_topic: /fmu/out/vehicle_status_v1
     timesync_topic: /fmu/out/timesync_status
     status_topic: /px4_offboard_bridge/status
     expected_frame: map
@@ -9,11 +10,15 @@ px4_offboard_bridge:
     rate_hz: 30.0
     path_timeout_s: 0.5
     timesync_timeout_s: 1.5
+    vehicle_status_timeout_s: 1.5
+    path_duration_s: 75.0
+    tracking_error_pause_m: 2.0
+    reference_speed_limit_m_s: 1.5
+    reference_yaw_rate_limit_rad_s: 0.5
     # Safety gates: keep all three false until the matching PX4/SITL line,
     # frame/origin alignment and external review are complete.
     enable_setpoints: true
     request_offboard: false
     request_arm: false
-    lookahead_points: 1
     alignment_yaw_rad: 0.0
     origin_ned: [0.0, 0.0, 0.0]

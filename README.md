@@ -8,10 +8,12 @@
 - MID‑360/Livox/FAST‑LIO2 仿真数据链
 - D435i/MID‑360 传感器挂载模型
 - ROS 2 点云、TF、里程计和 rosbag 记录
-- 51 项自动化回归测试和 150 组批量实验
+- 62 项自动化回归测试和 150 组批量实验
 ## 仿真验证结果
 当前已验证：
-- `51 passed`
+- `62 passed`
+- 完成 FAST-LIO2 → SUPER → PX4 ROS 2 Offboard 闭环，19/19 个巡检目标到达并确认落地解锁
+- 已录制合成 MID-360/FAST-LIO2 rosbag：`artifacts/rosbags/mid360_fastlio_20261002_070303`
 - `SIMULATION_VERIFICATION_OK`
 - 带传感器 `iris_inspection` 模型实际爬升约 9.55 m
 - 完成两圈上升巡检轨迹

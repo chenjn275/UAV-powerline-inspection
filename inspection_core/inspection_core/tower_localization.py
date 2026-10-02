@@ -68,18 +68,44 @@ def estimate_tower_observation(
         raise ValueError("trim_fraction must be in [0, 0.5)")
     xs = [row[0] for row in rows]
     ys = [row[1] for row in rows]
-    zs = [row[2] for row in rows]
-    lo = trim_fraction
-    hi = 1.0 - trim_fraction
-    x_lo, x_hi = _percentile(xs, lo), _percentile(xs, hi)
-    y_lo, y_hi = _percentile(ys, lo), _percentile(ys, hi)
-    inlier = [row for row in rows if x_lo <= row[0] <= x_hi and y_lo <= row[1] <= y_hi]
+    # A tower cloud is a compact radial cluster; wires and stray returns are
+    # often long, thin outliers on one side. Coordinate-wise trimming alone
+    # leaves those returns in the footprint estimate and can inflate the
+    # planned orbit radius by several metres. Fit a robust radial envelope
+    # about the XY median first, then calculate the tower bounds from that
+    # inlier set. The input is still expected to be a tower ROI; this is not a
+    # semantic detector for arbitrary full-scene clouds.
+    seed_x, seed_y = _percentile(xs, 0.5), _percentile(ys, 0.5)
+    seed_radii = [math.hypot(row[0] - seed_x, row[1] - seed_y) for row in rows]
+    median_radius = _percentile(seed_radii, 0.5)
+    radial_deviations = [abs(radius - median_radius) for radius in seed_radii]
+    radial_mad = _percentile(radial_deviations, 0.5)
+    radial_cutoff = max(
+        _percentile(seed_radii, 0.80),
+        median_radius + 4.0 * max(1.4826 * radial_mad, 0.05),
+    )
+    radial_inliers = [
+        row for row, radius in zip(rows, seed_radii) if radius <= radial_cutoff
+    ]
+    if len(radial_inliers) < min_points:
+        raise ValueError("tower ROI became too small after robust radial filtering")
+    x_lo = _percentile([row[0] for row in radial_inliers], trim_fraction)
+    x_hi = _percentile([row[0] for row in radial_inliers], 1.0 - trim_fraction)
+    y_lo = _percentile([row[1] for row in radial_inliers], trim_fraction)
+    y_hi = _percentile([row[1] for row in radial_inliers], 1.0 - trim_fraction)
+    inlier = [row for row in radial_inliers if x_lo <= row[0] <= x_hi and y_lo <= row[1] <= y_hi]
     if len(inlier) < min_points:
         raise ValueError("tower ROI became too small after robust trimming")
     center_x = sum(row[0] for row in inlier) / len(inlier)
     center_y = sum(row[1] for row in inlier) / len(inlier)
-    base_z = _percentile(zs, 0.02)
-    top_z = _percentile(zs, 0.98)
+    # Coordinate-wise trimming is useful for the XY center, but the tower's
+    # horizontal footprint narrows towards the top. Applying that same trim
+    # to Z removes valid upper and lower structure points and underestimates
+    # the height. The radial filter has already removed the long conductor
+    # returns, so use its points for the robust vertical extent.
+    inlier_z = [row[2] for row in radial_inliers]
+    base_z = _percentile(inlier_z, 0.02)
+    top_z = _percentile(inlier_z, 0.98)
     if top_z - base_z < min_height_m:
         raise ValueError("tower observation has insufficient vertical extent")
     radial_errors = [math.hypot(row[0] - center_x, row[1] - center_y) for row in inlier]

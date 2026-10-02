@@ -10,7 +10,7 @@ This ledger is an engineering boundary record for the prototype. It is not a leg
 | FAST-LIO2 | `633f681dc5bda92de63379db056016103de5d3c8` | Installed and verified in MID-360 simulation | LIO and de-skewed point cloud | Physical sensor validation remains |
 | Livox ROS driver 2 | `960bb5702c1e3a6197ff8fc5c3c9bca4e2e87f37` | Installed and verified in MID-360 simulation | LiDAR/IMU driver | Confirm MID-360S firmware/hardware support |
 | RealSense ROS | Planned; commit not selected | D435i not verified | RGB acquisition and calibration | Confirm SDK/firmware and model license |
-| PX4 | `6ea3539157ca358c70a515878b77077af7d4611d` (`v1.16.0-dirty`) | Local SITL checkout; historical ULog verified | Offboard execution and estimator interface | Clean Gazebo/TCP 4560 rerun remains open |
+| PX4 | `6ea3539157ca358c70a515878b77077af7d4611d` (`v1.16.0-dirty`) | Local SITL checkout; 2026-10-02 ROS 2 Offboard run reached 19/19 goals and disarmed | Offboard execution and estimator interface | Hardware/PX4 clean-tree validation remains |
 | `inspection_core` | Workspace-authored, uncommitted | New reference implementation in this repository | Line model, scan geometry, clearance and coverage bookkeeping | Keep ownership and contributor record; license is internal until confirmed |
 
 The project-authored modules must not copy third-party source. They consume documented interfaces and keep the upstream component and project version in the run metadata.

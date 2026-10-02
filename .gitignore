@@ -9,3 +9,15 @@
 **.bin
 **.zip
 **.ply
+
+# Python and ROS 2 build/runtime outputs
+**/__pycache__/
+*.py[cod]
+*.db3
+*.mcap
+log/
+artifacts/rosbags/
+
+# Host-installed third-party runtime binaries and reference media
+tools/
+misc/

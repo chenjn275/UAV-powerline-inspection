@@ -17,7 +17,6 @@ bag="$output_root/mid360_fastlio_${stamp}"
 export ROS_DOMAIN_ID="$domain"
 topics=(
   /livox/lidar
-  /livox/lidar/pointcloud
   /livox/imu
   /cloud_registered
   /cloud_registered_body
@@ -27,7 +26,17 @@ topics=(
   /tf_static
 )
 echo "Recording ${duration}s to ${bag} (ROS_DOMAIN_ID=${ROS_DOMAIN_ID})"
+set +e
 timeout --signal=INT --kill-after=5s "$duration" \
   ros2 bag record --storage sqlite3 --output "$bag" "${topics[@]}"
+record_status=$?
+set -e
+# GNU timeout returns 124 when the requested duration expires.  The recorder
+# has already received SIGINT and flushed its cache in that case, so it is a
+# successful bounded capture.  Preserve real recorder failures.
+if [[ "$record_status" -ne 0 && "$record_status" -ne 124 && "$record_status" -ne 130 ]]; then
+  echo "ros2 bag record failed with status ${record_status}" >&2
+  exit "$record_status"
+fi
 ros2 bag info "$bag" | tee "${bag}.info.txt"
 echo "ROS_BAG_RECORD_OK $bag"

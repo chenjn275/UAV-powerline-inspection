@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Publish a deterministic inspection candidate and reference path.
+"""Build an online tower inspection path from point-cloud observations.
 
-This node deliberately stops at candidate selection.  It does not publish
-flight-control setpoints; the future SUPER adapter remains the sole planning
-and control boundary described by the task book.
+The node consumes the latest tower center/extent and obstacle cloud, selects
+the first safe standoff radius, and republishes a fresh Path for the PX4
+Offboard bridge.  It remains controller-agnostic: PX4 commands are emitted by
+``px4_offboard_bridge`` when explicitly enabled by the launch configuration.
 """
 
 import math

@@ -12,6 +12,8 @@
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>visualization_msgs</depend>
+  <exec_depend>livox_ros_driver2</exec_depend>
+  <exec_depend>px4_msgs</exec_depend>
   <exec_depend>inspection_core</exec_depend>
   <exec_depend>px4_offboard_bridge</exec_depend>
   <export><build_type>ament_cmake</build_type></export>

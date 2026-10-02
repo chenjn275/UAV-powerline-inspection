@@ -86,11 +86,11 @@ source /opt/ros/humble/setup.bash
 source /home/venom/venom_ws/install/setup.bash
 export ROS_DOMAIN_ID=42
 
-ros2 run tf2_ros tf2_echo base_link mid360_mount
-ros2 run tf2_ros tf2_echo base_link d435i_mount
+ros2 run tf2_ros tf2_echo base_link livox_frame
+ros2 run tf2_ros tf2_echo base_link imu_link
 ros2 topic echo /tf_static --once
 ros2 topic echo /cloud_registered --once
-ros2 topic echo /livox/lidar/pointcloud --once
+ros2 topic echo /livox/lidar --once
 ```
 
 检查点云坐标系：
@@ -146,6 +146,57 @@ export ROS_DOMAIN_ID=42
 export ROS_LOG_DIR=/tmp/venom_ros_log
 ros2 launch fast_lio mapping.launch.py use_sim_time:=true rviz:=false
 ```
+
+## 3.1 FAST-LIO2 接入 PX4 巡检闭环（汇报模式）
+
+这一条由仿真器生成符合 Livox `CustomMsg` 结构的雷达帧和 IMU 数据，接入
+真实运行的 FAST-LIO2 `fastlio_mapping`；再由 `/cloud_registered` 做塔定位、
+自动半径规划和 PX4 Offboard 飞行。输入点来自项目的确定性塔模型，并按
+PX4 local position 变换；它不是 Gazebo ray-cast，也不代表 MID-360 硬件噪声、
+扫描时序和标定精度。它与只发布合成 `/inspection/tower_points` 的几何回归
+模式不同，后者不运行 FAST-LIO2。
+
+```bash
+cd "/home/venom/Documents/ChatGPT/巡检/SUPER"
+export ROS_DOMAIN_ID=50
+export ROS_LOG_DIR=/tmp/super_ros_log
+export PX4_ROOT=/home/venom/PX4-Autopilot
+export FAST_LIO_WORKSPACE=/home/venom/venom_ws
+export PX4_INSPECTION_USE_ROS_OFFBOARD=1
+export PX4_INSPECTION_USE_FAST_LIO=1
+export PX4_ROS_OFFBOARD_TIMEOUT_S=180
+export PX4_ROS_PATH_DURATION_S=45
+export GAZEBO_MASTER_URI=http://127.0.0.1:11345
+export GAZEBO_IP=127.0.0.1
+export GAZEBO_HOST=127.0.0.1
+unset HEADLESS
+export PX4_ROS_FAST_LIO_RVIZ=true
+bash scripts/run_px4_inspection_sitl.sh
+```
+
+无显示器时把 `unset HEADLESS` 改成 `export HEADLESS=1`，并把
+`PX4_ROS_FAST_LIO_RVIZ` 设为 `false`。验证链路时另开终端：
+
+```bash
+source /opt/ros/humble/setup.bash
+source /home/venom/venom_ws/install/setup.bash
+source "/home/venom/Documents/ChatGPT/巡检/super_ws/install/setup.bash"
+export ROS_DOMAIN_ID=50
+ros2 topic type /livox/lidar
+ros2 topic hz /livox/lidar
+ros2 topic hz /livox/imu
+ros2 topic hz /cloud_registered
+ros2 topic hz /odom
+ros2 topic echo /inspection/fast_lio/input_status --once
+ros2 topic echo /inspection/status --once
+ros2 topic echo /inspection/reference_path --once
+ros2 run tf2_ros tf2_echo base_link livox_frame
+```
+
+验收日志必须同时出现 `fastlio_mapping: Initialize the map kdtree`、
+`OUTPUTTING_SETPOINT`、`PX4_DISARMED_AFTER_LAND`。FAST-LIO 模式下规划器的
+输入是 `/cloud_registered`（`sensor_msgs/msg/PointCloud2`），不是诊断用的
+`/inspection/tower_points`。
 
 ## 4. 检查传感器、点云和 FAST-LIO2 输出
 
@@ -213,7 +264,7 @@ cd "/home/venom/Documents/ChatGPT/巡检"
 bash SUPER/scripts/verify_simulation.sh
 ```
 
-预期输出：`51 passed`、`SIMULATION_VERIFICATION_OK`。
+预期输出：`62 passed`、`SIMULATION_VERIFICATION_OK`。
 
 ## 8. 结束仿真
 

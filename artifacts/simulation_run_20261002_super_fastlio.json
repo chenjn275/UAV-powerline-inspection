@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-02",
+  "mode": "PX4 ROS 2 Offboard SITL with FAST-LIO2/MID-360 simulation and SUPER",
+  "ros_domain_id": 53,
+  "ros_log": "/tmp/super_px4_inspection/run_20261002_102538_2183466.ros_offboard.log",
+  "path_points": 145,
+  "super_goals": 19,
+  "super_goals_reached": 19,
+  "super_mission_complete": true,
+  "super_setpoint_log_samples": 3149,
+  "fast_lio_map_initialized": true,
+  "fast_lio_sensor_pose_connected": true,
+  "rviz_started": true,
+  "px4_nav_land_requested": true,
+  "px4_disarmed_after_land": true,
+  "px4_mode_exited_before_completion": false,
+  "corridor_or_ground_safety_errors": 0,
+  "super_recoverable_optimization_warnings": 60,
+  "rosbag": {
+    "path": "artifacts/rosbags/mid360_fastlio_20261002_070303",
+    "duration_s": 19.702659723,
+    "messages": 2418,
+    "topics": [
+      "/livox/lidar",
+      "/livox/imu",
+      "/cloud_registered",
+      "/odom",
+      "/path",
+      "/tf",
+      "/tf_static"
+    ]
+  },
+  "regression": {
+    "pytest_passed": 62,
+    "scenario_validation": "SIMULATION_VERIFICATION_OK"
+  },
+  "limitations": [
+    "Livox returns and IMU data are deterministic synthetic inputs, not MID-360S hardware measurements.",
+    "No real-aircraft Offboard authorization or hardware acceptance is implied.",
+    "SUPER emitted 60 recoverable trajectory optimization warnings during replanning; every warning recovered and the mission completed through SUPER setpoints."
+  ]
+}

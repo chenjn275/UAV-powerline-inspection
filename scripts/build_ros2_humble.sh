@@ -31,6 +31,11 @@ if [[ ! -d "${workspace}/src" ]]; then
   exit 1
 fi
 
+# The bridge monitors PX4 mode, arming and landing state. Keep this interface
+# in the project checkout so a fresh local px4_msgs workspace can generate it
+# before the colcon build.
+bash "${super_root}/scripts/prepare_px4_msgs.sh" "${workspace}"
+
 # ROS setup templates intentionally read a few optional variables before
 # assigning defaults, so disable nounset only while sourcing them.
 set +u

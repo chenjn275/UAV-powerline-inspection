@@ -43,6 +43,7 @@
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <tf2_ros/transform_broadcaster.h>
 #include <visualization_msgs/msg/marker_array.hpp>
+#include <atomic>
 
 #include <rog_map/rog_map.h>
 #include <super_utils/color_msg_utils.hpp>
@@ -84,6 +85,8 @@ namespace rog_map {
             mutex updete_lock;
         } rc_;
 
+        std::atomic_bool updates_paused_{false};
+
         void odomCallback(const nav_msgs::msg::Odometry::SharedPtr odom_msg) {
             updateRobotState(std::make_pair(Vec3f(odom_msg->pose.pose.position.x,
                                                   odom_msg->pose.pose.position.y,
@@ -109,6 +112,9 @@ namespace rog_map {
         }
 
         void cloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr cloud_msg) {
+            if (updates_paused_.load(std::memory_order_relaxed)) {
+                return;
+            }
             if (!robot_state_.rcv) {
                 std::cout << YELLOW << " -- [ROS] No odom received, skip cloud callback." << RESET << std::endl;
                 return;
@@ -129,6 +135,12 @@ namespace rog_map {
         }
 
         void updateCallback() {
+            if (updates_paused_.load(std::memory_order_relaxed)) {
+                rc_.updete_lock.lock();
+                rc_.unfinished_frame_cnt = 0;
+                rc_.updete_lock.unlock();
+                return;
+            }
             if (map_empty_) {
                 static double last_print_t = nh_->get_clock()->now().seconds();
                 double cur_t = nh_->get_clock()->now().seconds();
@@ -310,6 +322,16 @@ namespace rog_map {
 
     public:
         typedef shared_ptr<ROGMapROS> Ptr;
+
+        // Stop consuming sensor frames once the mission controller has handed
+        // control to PX4's landing state.  Odometry subscriptions remain
+        // active so the rest of the ROS graph can still observe landing.
+        void pauseUpdates() {
+            updates_paused_.store(true, std::memory_order_relaxed);
+            rc_.updete_lock.lock();
+            rc_.unfinished_frame_cnt = 0;
+            rc_.updete_lock.unlock();
+        }
 
         ROGMapROS(const rclcpp::Node::SharedPtr nh, const std::string& cfg_path): nh_(nh) {
             // TODO: The current implementation uses a lenient QoS configuration for message transmission.

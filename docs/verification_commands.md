@@ -175,3 +175,19 @@ opt-in and mode/arming requests remain off:
 ros2 launch inspection_manager tower_pointcloud_demo.launch.py \
   enable_px4_setpoints:=true request_offboard:=false request_arm:=false
 ```
+
+## FAST-LIO2 PX4 闭环检查
+
+启用 `PX4_INSPECTION_USE_FAST_LIO=1` 后，在同一 ROS domain 的任务终端执行：
+
+```bash
+ros2 topic type /livox/lidar
+ros2 topic info /cloud_registered -v
+ros2 topic echo /inspection/fast_lio/input_status --once
+ros2 topic echo /inspection/status --once
+ros2 topic echo /inspection/reference_path --once
+```
+
+`/inspection/fast_lio/input_status` 应报告
+`FAST_LIO_INPUT_READY source=PX4_ODOMETRY`。如果没有该消息，传感器仿真仍处于
+静态启动姿态，不能作为飞机跟随 FAST-LIO 的闭环证据。

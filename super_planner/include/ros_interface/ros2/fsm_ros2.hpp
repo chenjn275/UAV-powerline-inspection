@@ -37,6 +37,7 @@
 #include "nav_msgs/msg/odometry.hpp"
 #include "mars_quadrotor_msgs/msg/position_command.hpp"
 #include "mars_quadrotor_msgs/msg/polynomial_trajectory.hpp"
+#include "std_msgs/msg/string.hpp"
 
 
 namespace fsm {
@@ -47,6 +48,7 @@ namespace fsm {
         rclcpp::Publisher<mars_quadrotor_msgs::msg::PolynomialTrajectory>::SharedPtr mpc_cmd_pub_;
         rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub_;
         rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr goal_sub_;
+        rclcpp::Subscription<std_msgs::msg::String>::SharedPtr stop_sub_;
 
         rclcpp::TimerBase::SharedPtr execution_timer_, replan_timer_, cmd_timer_;
         rclcpp::CallbackGroup::SharedPtr exec_cbk_group_, replan_cbk_group_, cmd_cbk_group_, goal_cbk_group_;
@@ -60,6 +62,21 @@ namespace fsm {
 
         void resetVisualizedPath() override {
             path.poses.clear();
+        }
+
+        void stopCallback(const std_msgs::msg::String::SharedPtr msg) {
+            const auto &status = msg->data;
+            if (status == "SUPER_MISSION_COMPLETE" ||
+                status == "PX4_LANDING_ACTIVE" ||
+                status == "PX4_DISARMED_AFTER_LAND") {
+                if (!stop) {
+                    stopPlanning();
+                    if (map_ptr_) {
+                        map_ptr_->pauseUpdates();
+                    }
+                    cout << YELLOW << " -- [Fsm] Mission finished; planner timers stopped." << RESET << endl;
+                }
+            }
         }
 
         void publishCurPoseToPath() override {
@@ -313,6 +330,13 @@ namespace fsm {
                         so);
                 cout << YELLOW << " -- [Fsm] CLICKGOAL ENABLE." << RESET << endl;
                 cmd_cnt++;
+            }
+
+            if (!cfg_.stop_topic.empty()) {
+                stop_sub_ = nh_->create_subscription<std_msgs::msg::String>(
+                        cfg_.stop_topic,
+                        qos,
+                        std::bind(&FsmRos2::stopCallback, this, std::placeholders::_1));
             }
 
             if (cmd_cnt != 1) {
